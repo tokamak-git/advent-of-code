@@ -8,11 +8,7 @@ fn main() -> io::Result<()> {
     let file = File::open("input.txt").unwrap();
     let reader = BufReader::new(file);
 
-    // divide into chunks for parallel processing - streach goal
-    // write filter logic
-    // every sentence contains a single 2 digit number, defined as first and last number in
-    // string
-    println!("sum: {}", calculate_sum(reader));
+    println!("{:?}", calculate_sum(reader));
     Ok(())
 }
 
@@ -25,28 +21,20 @@ fn calculate_sum<R: BufRead>(r: R) -> u32 {
 
         let l = line.unwrap();
 
-        println!("pre process line: {}", l);
         let s: String = pre_process(&l);
-        println!("post process line: {}", s);
         match read_line(s.chars()) {
             Some(c) => c1 = c,
-            // None => panic!("Failed to find any digit in"),
-            None => println!("s: {}", s),
+            None => panic!("Failed to find any digit in"),
         };
         match read_line(s.chars().rev()) {
             Some(c) => c2 = c,
-            // None => panic!("Failed to find any digit in"),
-            None => println!("s: {}", s),
+            None => panic!("Failed to find any digit in"),
         };
 
         // construct number
         sum += format!("{}{}", c1, c2)
             .parse::<u32>()
             .expect("failed to find number");
-        println!(
-            "line: {:?},s: {}, c1: {}, c2: {}, sum: {}",
-            l, s, c1, c2, sum
-        );
     }
     sum
 }
